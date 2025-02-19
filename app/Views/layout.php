@@ -40,10 +40,10 @@
 <body>
 
 <div id="sidebar">
-    <h3 class="text-center">My Pos</h3>
+<!--    <h3 class="text-center">My Pos</h3>-->
     <a href="<?= base_url('food-list'); ?>">Foods List</a>
     <a href="<?= base_url('orders-list'); ?>">Orders</a>
-    <a href="<?= base_url('log-in'); ?>">Log Out</a>
+    <a href="<?= base_url('log-in'); ?>" class="text-danger">Log Out</a>
 </div>
 
 <!-- Main Content -->

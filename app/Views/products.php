@@ -5,8 +5,6 @@
 <div class="container mt-4">
     <h2 class="text-center mb-4">Foods List</h2>
 
-
-
     <!-- Search Bar -->
     <div class="mb-4">
         <input type="text" id="searchInput" class="form-control" placeholder="Search for food..." onkeyup="filterFoods()">
@@ -25,13 +23,6 @@
             ["name" => "Veggie Burger", "price" => "$5.29", "image" => "burger3.jpg"],
             ["name" => "BBQ Burger", "price" => "$7.99", "image" => "burger4.jpg"],
             ["name" => "Double Burger", "price" => "$8.49", "image" => "burger5.jpg"],
-        ],
-        "Pizzas" => [
-            ["name" => "Pepperoni Pizza", "price" => "$9.99", "image" => "pizza1.jpg"],
-            ["name" => "Margherita", "price" => "$8.99", "image" => "pizza2.jpg"],
-            ["name" => "BBQ Chicken", "price" => "$10.49", "image" => "pizza3.jpg"],
-            ["name" => "Hawaiian", "price" => "$9.29", "image" => "pizza4.jpg"],
-            ["name" => "Meat Lovers", "price" => "$11.99", "image" => "pizza5.jpg"],
         ]
     ];
     ?>
@@ -43,11 +34,11 @@
                 <?php foreach ($foods as $food): ?>
                     <div class="col-md-4 col-lg-3 food-item">
                         <div class="card shadow-sm mb-4">
-                            <img src="<?= base_url('assets/images/'.$food['image']) ?>" class="card-img-top" alt="<?= $food['name'] ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?= $food['name'] ?></h5>
-                                <p class="card-text text-success fw-bold"><?= $food['price'] ?></p>
-                                <button class="btn btn-outline-primary w-100 select-btn" onclick="toggleSelection(this, '<?= $food['name'] ?>')">Select</button>
+                                <p class="card-text text-success fw-bold">Price: <?= $food['price'] ?></p>
+                                <input type="number" class="form-control mb-2 qty-input" min="0" value="0" oninput="updateSelection(this, '<?= $food['name'] ?>')">
+                                <button class="btn btn-outline-primary w-100 select-btn" onclick="toggleSelection(this, '<?= $food['name'] ?>')" disabled>Select</button>
                             </div>
                         </div>
                     </div>
@@ -58,30 +49,50 @@
 </div>
 
 <script>
-    let selectedFoods = [];
+    let selectedFoods = {};
+
+    function updateSelection(input, foodName) {
+        let qty = parseInt(input.value) || 0;
+        let selectBtn = input.nextElementSibling;
+
+        selectBtn.disabled = qty === 0;
+        if (qty === 0) {
+            delete selectedFoods[foodName];
+            selectBtn.classList.remove("btn-primary");
+            selectBtn.classList.add("btn-outline-primary");
+            selectBtn.innerText = "Select";
+        }
+        toggleProcessOrderButton();
+    }
 
     function toggleSelection(button, foodName) {
-        if (selectedFoods.includes(foodName)) {
-            selectedFoods = selectedFoods.filter(item => item !== foodName);
+        let qtyInput = button.previousElementSibling;
+        let qty = parseInt(qtyInput.value) || 0;
+
+        if (selectedFoods[foodName]) {
+            delete selectedFoods[foodName];
             button.classList.remove("btn-primary");
             button.classList.add("btn-outline-primary");
             button.innerText = "Select";
-        } else {
-            selectedFoods.push(foodName);
+            qtyInput.disabled = false;
+        } else if (qty > 0) {
+            selectedFoods[foodName] = qty;
             button.classList.remove("btn-outline-primary");
             button.classList.add("btn-primary");
             button.innerText = "Selected";
+            qtyInput.disabled = true;
         }
         toggleProcessOrderButton();
     }
 
     function toggleProcessOrderButton() {
         let processOrderBtn = document.getElementById("processOrderBtn");
-        processOrderBtn.style.display = selectedFoods.length > 0 ? "inline-block" : "none";
+        processOrderBtn.style.display = Object.keys(selectedFoods).length > 0 ? "inline-block" : "none";
     }
 
     function processOrder() {
-        alert("Processing order for: " + selectedFoods.join(", "));
+        let orderSummary = Object.entries(selectedFoods).map(([name, qty]) => `${name} (Qty: ${qty})`).join(", ");
+        alert("Processing order for: " + orderSummary);
     }
 
     function filterFoods() {
