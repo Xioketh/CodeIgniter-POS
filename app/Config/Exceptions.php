@@ -23,6 +23,7 @@ class Exceptions extends BaseConfig
      * Default: true
      */
     public bool $log = true;
+    public $display_error_backtrace = true;
 
     /**
      * --------------------------------------------------------------------------

@@ -8,45 +8,33 @@
     <link rel="shortcut icon" type="image/png" href="/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- STYLES -->
-
-    <style>
-        body {
-            display: flex;
-        }
-        #sidebar {
-            width: 250px;
-            height: 100vh;
-            background-color: #343a40;
-            color: white;
-            padding-top: 20px;
-        }
-        #sidebar a {
-            color: white;
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-        }
-        #sidebar a:hover {
-            background-color: #495057;
-        }
-        #content {
-            flex-grow: 1;
-            padding: 20px;
-        }
-    </style>
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>-->
 </head>
+
 <body>
 
-<div id="sidebar">
-<!--    <h3 class="text-center">My Pos</h3>-->
-    <a href="<?= base_url('food-list'); ?>">Foods List</a>
-    <a href="<?= base_url('orders-list'); ?>">Orders</a>
-    <a href="<?= base_url('log-in'); ?>" class="text-danger">Log Out</a>
-</div>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a  class="nav-link active" href="<?= base_url('food-list'); ?>">Foods List</a>
+                </li>
+                <li class="nav-item">
+                    <a  class="nav-link active" href="<?= base_url('orders-list'); ?>">Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a  class="nav-link active text-danger" href="<?= base_url('log-in'); ?>">Log Out</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<!-- Main Content -->
+
 <div id="content">
     <?= $this->renderSection('content'); ?>
 </div>

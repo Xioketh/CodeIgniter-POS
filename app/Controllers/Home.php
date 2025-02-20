@@ -16,7 +16,7 @@ class Home extends BaseController
 
     public function products(): string
     {
-        return view('products');
+        return view('food_list');
     }
 
     public function orders(): string

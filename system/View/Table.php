@@ -88,7 +88,7 @@ class Table
     public $function;
 
     /**
-     * Order each inserted row by heading keys
+     * OrderModel each inserted row by heading keys
      */
     private bool $syncRowsWithHeading = false;
 
