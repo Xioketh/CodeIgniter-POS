@@ -19,7 +19,7 @@ class OrderController extends Controller
         }
 
         $selectedFoods = $requestData['selectedFoods'];
-        $status = isset($requestData['status']) ? (int) $requestData['status'] : 1; // Default status = 1
+        $status = isset($requestData['status']) ? (int)$requestData['status'] : 1; // Default status = 1
 
         $orderModel = new OrderModel();
         $orderItemsModel = new OrderItemsModel();
@@ -28,7 +28,7 @@ class OrderController extends Controller
         $lastOrder = $orderModel->orderBy('id', 'DESC')->first();
         if ($lastOrder && isset($lastOrder['order_id'])) {
             $lastOrderId = $lastOrder['order_id'];
-            $numericPart = (int) substr($lastOrderId, 3); // Extract number part
+            $numericPart = (int)substr($lastOrderId, 3); // Extract number part
             $newOrderId = 'ORD' . str_pad($numericPart + 1, 4, '0', STR_PAD_LEFT); // Increment and format
         } else {
             $newOrderId = 'ORD0001'; // Default starting order ID
@@ -72,8 +72,14 @@ class OrderController extends Controller
         $orderModel = new OrderModel();
 
         if ($orderDate) {
-            $placedOrders = $orderModel->where('order_date', $orderDate)->where('status', 1)->findAll();
-            $holdOrders = $orderModel->where('order_date', $orderDate)->where('status', 0)->findAll();
+            $placedOrders = $orderModel
+                ->like('order_date', $orderDate)
+                ->where('status', 1)
+                ->findAll();
+            $holdOrders = $orderModel
+                ->like('order_date', $orderDate)
+                ->where('status', 0)
+                ->findAll();
 
         } else {
             // Handle the case where no date is selected (e.g., show all orders or a message)
@@ -86,5 +92,41 @@ class OrderController extends Controller
             'holdOrders' => $holdOrders,
         ]);
     }
+
+
+    public function getOrderItems()
+    {
+        $orderItemsModel = new \App\Models\OrderItemsModel();
+        $orderId = $this->request->getPost('order_id');
+
+        if (!$orderId) {
+            return $this->response->setJSON(['error' => 'Missing order ID']);
+        }
+
+        $orderItems = $orderItemsModel->where('order_id', $orderId)->findAll();
+        return $this->response->setJSON($orderItems);
+    }
+
+    public function changeOrderStatus()
+    {
+        $orderModel = new \App\Models\OrderModel();
+        $orderId = $this->request->getPost('order_id');
+
+        if (!$orderId) {
+            return $this->response->setJSON(['error' => 'Missing order ID']);
+        }
+
+        $updated = $orderModel->set('status', 1)
+            ->where('order_id', $orderId)
+            ->update();
+
+
+        if ($updated) {
+            return $this->response->setJSON(['success' => 'Order placed successfully']);
+        } else {
+            return $this->response->setJSON(['error' => 'Failed to place order']);
+        }
+    }
+
 
 }

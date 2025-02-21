@@ -22,6 +22,10 @@ $routes->get('/foods/(:num)', 'CategoryController::getFoods/$1');
 
 $routes->post('order/placeOrder', 'OrderController::placeOrder');
 
-$routes->post('orders/search', 'Orders::search');
+$routes->post('orders/search', 'OrderController::search');
+
+$routes->post('/orders/getOrderItems', 'OrderController::getOrderItems');
+$routes->post('/orders/changeOrderStatus', 'OrderController::changeOrderStatus');
+
 
 
