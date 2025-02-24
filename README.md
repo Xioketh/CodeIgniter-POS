@@ -1,60 +1,116 @@
-# CodeIgniter 4 Framework
+# README.md
 
-## What is CodeIgniter?
+## Project Name: Noche Kitchen Sales Management
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+This project is a web-based application designed to streamline day-to-day sales operations for Noche Kitchen.  It provides a system for recording transactions, managing orders, and potentially generating reports, helping staff efficiently handle sales and track key business data.
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+### Project Purpose
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+This application aims to replace manual sales tracking methods with a digital solution.  It will allow Noche Kitchen staff to quickly and accurately record customer orders, calculate totals, and manage transactions.  Future enhancements may include inventory management, sales reporting, and user role management.
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+### Technologies Used
 
-## Important Change with index.php
+*   PHP
+*   CodeIgniter 4 (Framework)
+*   MySQL (Database)
+*   HTML, CSS, JavaScript (Frontend)
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+### Installation
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/Xioketh/CodeIgniter-POS.git
+    ```
 
-**Please** read the user guide for a better explanation of how CI4 works!
+2.  **Install Dependencies:**
+    ```bash
+    composer install
+    ```
 
-## Repository Management
+3.  **Database Configuration:**
+    *   Create a MySQL database named `noche_kitchen`.
+    *   Open the `.env` file and configure the database connection settings:
+        ```
+        database.default.hostname = localhost
+        database.default.username = your_db_username
+        database.default.password = your_db_password
+        database.default.database = noche_kitchen
+        ```
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+4.  **Create Database Tables:**
+    ```bash
+    php spark migrate
+    ```
+    This command will run all pending migrations and create the necessary database tables.  If you have specific migration files, you can run them individually:
+    ```bash
+    php spark migrate -n CreateFoodsTable // Example: Runs only the CreateFoodsTable migration
+    ```
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+5.  **Seed the Database (Optional):**
+    If you have seed data (like initial food items), run:
+    ```bash
+    php spark db:seed FoodSeeder  // Example: Run the FoodSeeder
+    ```
 
-## Contributing
+6.  **Start the Development Server:**
+    ```bash
+    php spark serve
+    ```
 
-We welcome contributions from the community.
+7.  **Access the Application:**
+    Open your web browser and go to `http://localhost:8080` (or the URL provided by `php spark serve`).
 
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
+### Setting up the Project (PHP Spark Migrate)
 
-## Server Requirements
+CodeIgniter 4's `php spark migrate` command manages your database schema.
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+1.  **Create Migrations:**
+    ```bash
+    php spark migrate:create CreateFoodsTable // Creates a migration file
+    ```
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+2.  **Write Migration Code (Example):**
+    ```php
+    <?php
+    namespace App\Database\Migrations;
+    use CodeIgniter\Database\Migration;
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+    class CreateFoodsTable extends Migration
+    {
+        public function up()
+        {
+            $this->forge->addField([
+                //... your table fields...
+            ]);
+            $this->forge->addKey('id', true);
+            $this->forge->createTable('foods');
+        }
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+        public function down()
+        {
+            $this->forge->dropTable('foods');
+        }
+    }
+    ```
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+3.  **Run Migrations:**
+    ```bash
+    php spark migrate
+    ```
+
+4.  **Rollback Migrations:**
+    ```bash
+    php spark migrate:rollback
+    ```
+
+5.  **Other Migration Commands:**
+    *   `php spark migrate:status`
+    *   `php spark migrate:refresh` (Use with caution!)
+
+### Contributing
+
+[Add contribution guidelines if applicable]
+
+### License
+
+Copyright (c) 2023 Kethaka Janadithya Ranasinghe
