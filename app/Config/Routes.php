@@ -10,7 +10,7 @@ $routes->get('/', 'Home::login');
 $routes->get('/orders-list', 'Home::orders');
 
 
-//$routes->get('/home', 'Home::products');
+//$routes->get('/add-food', 'FoodController::add_food');
 
 
 //$routes->get('/food-list', 'Home::products');
@@ -26,6 +26,11 @@ $routes->post('orders/search', 'OrderController::search');
 
 $routes->post('/orders/getOrderItems', 'OrderController::getOrderItems');
 $routes->post('/orders/changeOrderStatus', 'OrderController::changeOrderStatus');
+
+
+$routes->get('/add-food', 'FoodController::index');
+$routes->post('/food/add', 'FoodController::addFood');
+
 
 
 

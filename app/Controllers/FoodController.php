@@ -1,32 +1,47 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Models\FoodModel;
+use App\Models\CategoryModel;
 use CodeIgniter\Controller;
-use CodeIgniter\Database\Query;
 
 class FoodController extends Controller
 {
     public function index()
     {
-        $foodModel = new FoodModel();
+        $categoryModel = new CategoryModel();
+        $data['categories'] = $categoryModel->findAll();
+        return view('add_food', $data);
+    }
 
-        // Join foods with categories and fetch all
-        $db = \Config\Database::connect();
-        $query = $db->query("
-            SELECT foods.id, foods.name, foods.price, categories.name as category
-            FROM foods
-            INNER JOIN categories ON foods.category_id = categories.id
-        ");
+    public function addFood()
+    {
+        $request = service('request');
 
-        $foods = $query->getResultArray();
-        $data['categories'] = [];
+        // Validate input
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'name' => 'required|min_length[3]|max_length[50]',
+            'price' => 'required|numeric|greater_than[0]',
+            'category_id' => 'required|integer'
+        ]);
 
-        // Group foods by category
-        foreach ($foods as $food) {
-            $data['categories'][$food['category']][] = $food;
+        if (!$validation->withRequest($this->request)->run()) {
+            return $this->response->setJSON(['status' => 'error', 'errors' => $validation->getErrors()]);
         }
 
-        return view('food_list', $data);
+        $foodModel = new FoodModel();
+        $foodData = [
+            'name' => $request->getPost('name'),
+            'price' => $request->getPost('price'),
+            'category_id' => $request->getPost('category_id')
+        ];
+
+        if ($foodModel->insert($foodData)) {
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Food item added successfully']);
+        } else {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to add food item']);
+        }
     }
 }

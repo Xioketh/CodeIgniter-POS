@@ -15,3 +15,6 @@
     background-color: #f8f9fa;
     border-radius: 5px;
 }
+
+
+.error { color: red; font-size: 14px; }

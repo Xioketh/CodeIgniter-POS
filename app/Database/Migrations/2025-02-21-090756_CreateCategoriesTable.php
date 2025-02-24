@@ -36,10 +36,14 @@ class CreateCategoriesTable extends Migration
         // Add predefined categories
         $builder = $this->db->table('categories');
         $categories = [
-            ['name' => 'Burger', 'is_active' => 1],
-            ['name' => 'Rice', 'is_active' => 1],
-            ['name' => 'Drinks', 'is_active' => 1],
-            ['name' => 'Add Ons', 'is_active' => 1]
+            ['name' => 'BURGERS', 'is_active' => 1],
+            ['name' => 'WRAPS', 'is_active' => 1],
+            ['name' => 'HOTDOGS', 'is_active' => 1],
+            ['name' => 'VEG', 'is_active' => 1],
+            ['name' => 'VEGAN', 'is_active' => 1],
+            ['name' => 'MUNCHEES', 'is_active' => 1],
+            ['name' => 'THIRSTY', 'is_active' => 1],
+            ['name' => 'ADD ON', 'is_active' => 1],
         ];
         $builder->insertBatch($categories); // Insert the predefined categories
     }

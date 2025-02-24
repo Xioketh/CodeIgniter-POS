@@ -30,6 +30,11 @@
     </div>
 
 
+    <div id="selectedFoodsSummary" class="alert alert-info mt-4" style="display: none;">
+        <h5>Total Items: <span id="totalQuantity">0</span></h5>
+        <h5>Total Price: Rs.<span id="totalPrice">0</span></h5>
+    </div>
+
     <!-- Selected Foods Table -->
     <div id="selectedFoodsTable" class="mt-4" style="display: none;">
         <hr>
@@ -116,7 +121,7 @@
                                             <p class="text-success fw-bold">Rs.${food.price}</p>
                                             <div class="input-group mb-3">
                                                 <input type="number" class="form-control food-qty" id="qty-${food.id}" min="0" value="0" onchange="toggleSelectButton(${food.id})">
-                                                <button class="btn btn-primary select-btn" id="btn-${food.id}" onclick="selectFood(${food.id}, '${food.name}', ${food.price})" disabled>Select</button>
+                                                <button class="btn btn-primary select-btn" id="btn-${food.id}" onclick="selectFood(${food.id}, '${food.name}', ${food.price})" disabled>Add</button>
                                             </div>
                                         </div>
                                     </div>
@@ -155,15 +160,26 @@
         let tableBody = document.getElementById("selectedFoodsList");
         let selectedFoodsTable = document.getElementById("selectedFoodsTable");
 
+        let selectedFoodsSummary = document.getElementById("selectedFoodsSummary");
+        let totalQuantitySpan = document.getElementById("totalQuantity");
+        let totalPriceSpan = document.getElementById("totalPrice");
+
         tableBody.innerHTML = "";
+
+        let totalQuantity = 0;
+        let totalPrice = 0;
+
         selectedFoods.forEach((food, index) => {
             let total = food.price * food.quantity;
+            totalQuantity += food.quantity;
+            totalPrice += total;
+
             let row = `
                 <tr>
                     <td>${food.name}</td>
                     <td>${food.quantity}</td>
-                    <td>$${food.price}</td>
-                    <td>$${total}</td>
+                    <td>Rs.${food.price}</td>
+                    <td>Rs.${total}</td>
                     <td>
                         <button class="btn btn-danger btn-sm" onclick="removeSelectedFood(${index})">Remove</button>
                     </td>
@@ -183,6 +199,15 @@
             qtyInput.value = 0; // Reset quantity to 0
             selectButton.disabled = true; // Disable select button
         });
+
+
+        // Show or hide elements based on selection
+        // selectedFoodsTable.style.display = selectedFoods.length > 0 ? "block" : "none";
+        // selectedFoodsSummary.style.display = selectedFoods.length > 0 ? "block" : "none";
+
+        // Update total values
+        // totalQuantitySpan.textContent = totalQuantity;
+        // totalPriceSpan.textContent = totalPrice
     }
 
     function resetOrder() {

@@ -1,0 +1,32 @@
+ERROR - 2025-02-24 09:36:33 --> mysqli_sql_exception: Table 'orders' already exists in C:\xampp\htdocs\CodeIgniter-POS\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\CodeIgniter-POS\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `o...', 0)
+#1 C:\xampp\htdocs\CodeIgniter-POS\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `o...')
+#2 C:\xampp\htdocs\CodeIgniter-POS\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `o...')
+#3 C:\xampp\htdocs\CodeIgniter-POS\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `o...')
+#4 C:\xampp\htdocs\CodeIgniter-POS\app\Database\Migrations\2025-02-22-074147_CreateOrdersTable.php(41): CodeIgniter\Database\Forge->createTable('orders')
+#5 C:\xampp\htdocs\CodeIgniter-POS\system\Database\MigrationRunner.php(866): App\Database\Migrations\CreateOrdersTable->up()
+#6 C:\xampp\htdocs\CodeIgniter-POS\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 C:\xampp\htdocs\CodeIgniter-POS\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 C:\xampp\htdocs\CodeIgniter-POS\system\CLI\Commands.php(70): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\CodeIgniter-POS\system\CLI\Console.php(48): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\CodeIgniter-POS\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\CodeIgniter-POS\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\CodeIgniter-POS\spark(84): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-02-24 11:59:12 --> mysqli_sql_exception: Table 'categories' already exists in C:\xampp\htdocs\Noche-Kitchen-Pos\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\Noche-Kitchen-Pos\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `c...', 0)
+#1 C:\xampp\htdocs\Noche-Kitchen-Pos\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `c...')
+#2 C:\xampp\htdocs\Noche-Kitchen-Pos\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `c...')
+#3 C:\xampp\htdocs\Noche-Kitchen-Pos\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `c...')
+#4 C:\xampp\htdocs\Noche-Kitchen-Pos\app\Database\Migrations\2025-02-21-090756_CreateCategoriesTable.php(34): CodeIgniter\Database\Forge->createTable('categories')
+#5 C:\xampp\htdocs\Noche-Kitchen-Pos\system\Database\MigrationRunner.php(866): App\Database\Migrations\CreateCategoriesTable->up()
+#6 C:\xampp\htdocs\Noche-Kitchen-Pos\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 C:\xampp\htdocs\Noche-Kitchen-Pos\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 C:\xampp\htdocs\Noche-Kitchen-Pos\system\CLI\Commands.php(70): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\Noche-Kitchen-Pos\system\CLI\Console.php(48): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\Noche-Kitchen-Pos\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\Noche-Kitchen-Pos\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\Noche-Kitchen-Pos\spark(84): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
