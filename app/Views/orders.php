@@ -148,17 +148,14 @@
                 order.order_date,
                 order.tot_qty,
                 order.total_price,
-                `<button class="btn btn-primary" onclick="viewOrderItems('${order.order_id}', '${tableId}')">View</button>`
+                `<button class="btn btn-primary" onclick="viewOrderItems('${order.order_id}', '${tableId}','${order.status}')">View</button>`
             ]).draw();
         });
 
         updateTotals(tableId, totalQty, totalPrice);
     }
 
-    function viewOrderItems(orderId, tableId) {
-        console.log('Fetching items for Order:', orderId);
-        console.log('tableId:', tableId);
-
+    function viewOrderItems(orderId, tableId, status) {
         fetch('/orders/getOrderItems', { // Update with your actual route
             method: 'POST',
             headers: {
@@ -169,14 +166,13 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                updateOrderItemsTable(data, tableId);
+                updateOrderItemsTable(data, tableId, status);
                 $('#orderItemsModal').modal('show'); // Show the modal
             })
             .catch(error => console.error('Error fetching order items:', error));
     }
 
-    function updateOrderItemsTable(items, tableId) {
+    function updateOrderItemsTable(items, tableId, status) {
         const tbody = document.getElementById('orderItemsTableBody');
 
         if (tableId !== 'placedOrdersTable'){
@@ -195,6 +191,10 @@
 
             // Append button to modal body
             modalBody.appendChild(placeOrderBtn);
+
+        }else{
+            const existingButton = document.getElementById('placeOrderButton');
+            if (existingButton) existingButton.remove();
         }
         tbody.innerHTML = ''; // Clear previous data
 
@@ -213,8 +213,6 @@
     }
 
     function changeStatusOfOrder(order_id){
-console.log(order_id)
-
         fetch('/orders/changeOrderStatus', { // Update with your actual route
             method: 'POST',
             headers: {
@@ -225,7 +223,6 @@ console.log(order_id)
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 Swal.fire({
                     title: '',
                     text: `Order placed successfully! Order ID: ${order_id}`,

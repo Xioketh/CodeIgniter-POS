@@ -39,6 +39,11 @@
     <div id="selectedFoodsTable" class="mt-4" style="display: none;">
         <hr>
         <h3>Selected Foods</h3>
+
+        <div class="alert alert-warning">
+            <h5>Total Price: Rs.<span id="tableTotalPrice">0</span></h5>
+        </div>
+
         <button class="btn btn-success m-0 p-1" onclick="placeOrder(1)">Place</button>
         <button class="btn btn-danger m-0 p-1" onclick="placeOrder(0)">Hold</button>
         <table class="table table-bordered mt-1">
@@ -62,8 +67,6 @@
     let selectedFoods = [];
 
     function placeOrder(status) {
-        console.log('Placing order:', selectedFoods);
-
         fetch('/order/placeOrder', {
             method: 'POST',
             headers: {
@@ -77,8 +80,6 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-
                 Swal.fire({
                     title: '',
                     text: status === 1 ? `Order placed successfully! Order ID: ${data.order_id}` : `Order hold successfully! Order ID: ${data.order_id}`,
@@ -96,7 +97,6 @@
     }
 
     function fetchFoods(categoryId) {
-        console.log('here')
         let foodContainer = document.getElementById("foodContainer");
         let foodsList = document.getElementById("foodsList");
         let categoryTitle = document.getElementById("selectedCategoryTitle");
@@ -120,8 +120,8 @@
                                             <h5 class="card-title">${food.name}</h5>
                                             <p class="text-success fw-bold">Rs.${food.price}</p>
                                             <div class="input-group mb-3">
-                                                <input type="number" class="form-control food-qty" id="qty-${food.id}" min="0" value="0" onchange="toggleSelectButton(${food.id})">
-                                                <button class="btn btn-primary select-btn" id="btn-${food.id}" onclick="selectFood(${food.id}, '${food.name}', ${food.price})" disabled>Add</button>
+                                                <input type="number" class="form-control food-qty" id="qty-${food.id}" min="1" value="1" onchange="toggleSelectButton(${food.id})">
+                                                <button class="btn btn-primary select-btn" id="btn-${food.id}" onclick="selectFood(${food.id}, '${food.name}', ${food.price})">Add</button>
                                             </div>
                                         </div>
                                     </div>
@@ -153,16 +153,25 @@
             // Add to selected foods list
             selectedFoods.push({id: foodId, name: foodName, price: foodPrice, quantity: qty, total: foodPrice * qty});
             updateSelectedFoodsTable(foodId);
+
+            Swal.fire({
+                icon: 'success', // You can change this to 'info', 'warning', or 'error' if needed
+                title: '',
+                // text:'Added'
+                showConfirmButton: false, // Hides the "OK" button
+                timer: 1000 // Closes the alert after 3 seconds
+            });
+
         }
     }
 
-    function updateSelectedFoodsTable() {
+    function updateSelectedFoodsTable(foodId) {
         let tableBody = document.getElementById("selectedFoodsList");
         let selectedFoodsTable = document.getElementById("selectedFoodsTable");
 
         let selectedFoodsSummary = document.getElementById("selectedFoodsSummary");
         let totalQuantitySpan = document.getElementById("totalQuantity");
-        let totalPriceSpan = document.getElementById("totalPrice");
+        let totalPriceSpan = document.getElementById("tableTotalPrice");
 
         tableBody.innerHTML = "";
 
@@ -191,14 +200,18 @@
         // Show the table if there are selected foods
         selectedFoodsTable.style.display = selectedFoods.length > 0 ? "block" : "none";
 
-        selectedFoods.forEach((food) => {
-            let qtyInput = document.getElementById(`qty-${food.id}`);
-            let selectButton = document.getElementById(`btn-${food.id}`);
+        totalPriceSpan.textContent = totalPrice
+
+        // selectedFoods.forEach((food) => {
+        if (foodId !== null){
+            let qtyInput = document.getElementById(`qty-${foodId}`);
+            let selectButton = document.getElementById(`btn-${foodId}`);
 
             qtyInput.disabled = false;
-            qtyInput.value = 0; // Reset quantity to 0
-            selectButton.disabled = true; // Disable select button
-        });
+            qtyInput.value = 1; // Reset quantity to 0
+            selectButton.disabled = false; // Disable select button
+        }
+        // });
 
 
         // Show or hide elements based on selection
@@ -207,7 +220,7 @@
 
         // Update total values
         // totalQuantitySpan.textContent = totalQuantity;
-        // totalPriceSpan.textContent = totalPrice
+
     }
 
     function resetOrder() {
@@ -219,12 +232,12 @@
 
         // Reset all quantity inputs and buttons
         document.querySelectorAll(".food-qty").forEach(input => {
-            input.value = 0;
+            input.value = 1;
             input.disabled = false;
         });
 
         document.querySelectorAll(".select-btn").forEach(button => {
-            button.disabled = true;
+            button.disabled = false;
         });
 
         // Hide the food container
@@ -247,7 +260,7 @@
         }
 
         // Update the table
-        updateSelectedFoodsTable();
+        updateSelectedFoodsTable(null);
     }
 </script>
 
